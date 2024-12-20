@@ -41,29 +41,29 @@ def create_checkboxes(frame, vars_list):
         var = tk.BooleanVar()
         vars_list.append(var)
         cb = tk.Checkbutton(frame, text=f"{i+1}", variable=var)
-        cb.pack(anchor="w")
+        cb.pack(side="left", padx=5)
 
 # グループ1
-group1_frame = tk.LabelFrame(root, text="軸1")
-group1_frame.grid(row=0, column=0, padx=5, pady=5, sticky="n")
+group1_frame = tk.LabelFrame(root, text="1着・1頭目")
+group1_frame.grid(row=0, column=0, padx=10, pady=10, sticky="n")
 group1_vars = []
 create_checkboxes(group1_frame, group1_vars)
 
 # グループ2
-group2_frame = tk.LabelFrame(root, text="軸2")
-group2_frame.grid(row=0, column=1, padx=5, pady=5, sticky="n")
+group2_frame = tk.LabelFrame(root, text="2着・2頭目")
+group2_frame.grid(row=1, column=0, padx=10, pady=10, sticky="n")
 group2_vars = []
 create_checkboxes(group2_frame, group2_vars)
 
 # グループ3
-group3_frame = tk.LabelFrame(root, text="軸3")
-group3_frame.grid(row=0, column=2, padx=10, pady=10, sticky="n")
+group3_frame = tk.LabelFrame(root, text="3着・3頭目")
+group3_frame.grid(row=2, column=0, padx=10, pady=10, sticky="n")
 group3_vars = []
 create_checkboxes(group3_frame, group3_vars)
 
 # 投票タイプ
 options_frame = tk.Frame(root)
-options_frame.grid(row=1, column=0, columnspan=3, pady=10)
+options_frame.grid(row=3, column=0, columnspan=3, pady=10)
 bet_type_var = tk.StringVar(value="3連複")
 tk.Label(options_frame, text="投票タイプ:").pack(side="left")
 tk.OptionMenu(options_frame, bet_type_var, "馬連", "馬単", "3連複", "3連単").pack(side="left")
@@ -74,7 +74,7 @@ calculate_button.pack(side="left", padx=10)
 
 # 結果ラベル
 result_label = tk.Label(root, text="結果がここに表示されます", fg="white")
-result_label.grid(row=2, column=0, columnspan=3)
+result_label.grid(row=4, column=0, columnspan=3)
 
 # メインループ
 root.mainloop()

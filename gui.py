@@ -44,6 +44,11 @@ def create_checkboxes(frame, vars_list):
         cb = tk.Checkbutton(frame, text=f"{i+1}", variable=var)
         cb.pack(side="left", padx=5, pady=5)
 
+#チェックボックスの選択状態をすべて変更する
+def set_all_checkbox(group, value):
+    for var in group:
+        var.set(value)
+
 # グループ1
 group1_frame = tk.LabelFrame(root, text="1着・1頭目")
 group1_frame.grid(row=0, column=0, padx=10, pady=10, sticky="n")
@@ -61,6 +66,23 @@ group3_frame = tk.LabelFrame(root, text="3着・3頭目")
 group3_frame.grid(row=2, column=0, padx=10, pady=10, sticky="n")
 group3_vars = []
 create_checkboxes(group3_frame, group3_vars)
+
+#全選択ボタン
+all_select_button_1 = tk.Button(root, text="全選択", command=lambda: set_all_checkbox(group1_vars, True))
+all_select_button_1.grid(row=0, column=1)
+all_select_button_2 = tk.Button(root, text="全選択", command=lambda: set_all_checkbox(group2_vars, True))
+all_select_button_2.grid(row=1, column=1)
+all_select_button_3 = tk.Button(root, text="全選択", command=lambda: set_all_checkbox(group3_vars, True))
+all_select_button_3.grid(row=2, column=1)
+
+#全選択解除ボタン
+all_unselect_button_1 = tk.Button(root, text="全選択解除", command=lambda: set_all_checkbox(group1_vars, False))
+all_unselect_button_1.grid(row=0, column=2)
+all_unselect_button_2 = tk.Button(root, text="全選択解除", command=lambda: set_all_checkbox(group2_vars, False))
+all_unselect_button_2.grid(row=1, column=2)
+all_unselect_button_3 = tk.Button(root, text="全選択解除", command=lambda: set_all_checkbox(group3_vars, False))
+all_unselect_button_3.grid(row=2, column=2)
+
 
 # フォントを作成
 default_font = font.nametofont("TkDefaultFont")

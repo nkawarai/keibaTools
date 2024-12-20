@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import font
 from tkinter import messagebox
 import BakenCombinationCalculator as Calc
 
@@ -7,24 +8,18 @@ def calculate():
         group1 = [i + 1 for i, var in enumerate(group1_vars) if var.get()]
         group2 = [i + 1 for i, var in enumerate(group2_vars) if var.get()]
         group3 = [i + 1 for i, var in enumerate(group3_vars) if var.get()]
-        bet_type = bet_type_var.get()
-
-        if not group1 or not group2 or not group3:
-            raise ValueError("各グループに少なくとも1頭選択してください。")
         
-        points = 0
-        if bet_type == "馬連":
-            points = Calc.calculate_umaren_formation_points(group1, group2)
-        elif bet_type == "馬単":
-            points = Calc.calculate_umatan_formation_points(group1, group2)
-        elif bet_type == "3連複":
-            points = Calc.calculate_3renpuku_formation_points(group1, group2, group3)
-        elif bet_type == "3連単":
-            points = Calc.calculate_3rentan_formation_points(group1, group2, group3)
+        #馬連
+        umaren_label.config(text=f"　馬連：{Calc.calculate_umaren_formation_points(group1, group2)}点")
 
-        print("買い目：" + str(points))
+        #馬単
+        umatan_label.config(text=f"　馬単：{Calc.calculate_umatan_formation_points(group1, group2)}点")
 
-        result_label.config(text=f"{bet_type}の買い目点数: {points}点")
+        #3連複
+        sanrenpuku_label.config(text=f"３連複：{Calc.calculate_3renpuku_formation_points(group1, group2, group3)}点")
+
+        #3連単
+        sanrentan_label.config(text=f"３連単：{Calc.calculate_3rentan_formation_points(group1, group2, group3)}点")
 
     except ValueError as e:
         messagebox.showerror("エラー", f"入力エラー: {e}")
@@ -36,12 +31,18 @@ root.title("競馬フォーメーション点数計算ツール")
 # チェックボックスの作成
 num_horses = 18
 
+# チェックボックスが変化した時のイベントハンドラ
+def on_check_change(var):
+    calculate()
+
+# チェックボックス作成
 def create_checkboxes(frame, vars_list):
     for i in range(num_horses):
         var = tk.BooleanVar()
+        var.trace_add("write", lambda *args: on_check_change(var))
         vars_list.append(var)
         cb = tk.Checkbutton(frame, text=f"{i+1}", variable=var)
-        cb.pack(side="left", padx=5)
+        cb.pack(side="left", padx=5, pady=5)
 
 # グループ1
 group1_frame = tk.LabelFrame(root, text="1着・1頭目")
@@ -61,20 +62,26 @@ group3_frame.grid(row=2, column=0, padx=10, pady=10, sticky="n")
 group3_vars = []
 create_checkboxes(group3_frame, group3_vars)
 
-# 投票タイプ
-options_frame = tk.Frame(root)
-options_frame.grid(row=3, column=0, columnspan=3, pady=10)
-bet_type_var = tk.StringVar(value="3連複")
-tk.Label(options_frame, text="投票タイプ:").pack(side="left")
-tk.OptionMenu(options_frame, bet_type_var, "馬連", "馬単", "3連複", "3連単").pack(side="left")
+# フォントを作成
+default_font = font.nametofont("TkDefaultFont")
+result_label_font = default_font.copy()
+result_label_font.configure(size=18)
 
-# 計算ボタン
-calculate_button = tk.Button(options_frame, text="計算する", command=calculate)
-calculate_button.pack(side="left", padx=10)
+# 馬連
+umaren_label = tk.Label(root, text="　馬連：", fg="white", font=result_label_font)
+umaren_label.grid(row=4, column=0, sticky="w", padx=30)
 
-# 結果ラベル
-result_label = tk.Label(root, text="結果がここに表示されます", fg="white")
-result_label.grid(row=4, column=0, columnspan=3)
+# 馬単
+umatan_label = tk.Label(root, text="　馬単：", fg="white", font=result_label_font)
+umatan_label.grid(row=5, column=0, sticky="w", padx=30)
+
+# 3連複
+sanrenpuku_label = tk.Label(root, text="３連複：", fg="white", font=result_label_font)
+sanrenpuku_label.grid(row=6, column=0, sticky="w", padx=30)
+
+# 3連単
+sanrentan_label = tk.Label(root, text="３連単：", fg="white", font=result_label_font)
+sanrentan_label.grid(row=7, column=0, sticky="w", padx=30)
 
 # メインループ
 root.mainloop()
